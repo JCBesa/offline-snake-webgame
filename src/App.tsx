@@ -27,6 +27,7 @@ function App() {
     pause,
     resume,
     restart,
+    reset,
     setDirection,
     updateSettings,
     loadSettings,
@@ -127,10 +128,10 @@ function App() {
     restart();
   }, [restart]);
 
-  const handleQuit = useCallback(() => {
-    if (isPlaying || isPaused) pause();
+  const handleQuitToMenu = useCallback(() => {
+    reset();
     setShowSettings(false);
-  }, [isPlaying, isPaused, pause]);
+  }, [reset]);
 
   const gameData = {
     snake,
@@ -301,7 +302,7 @@ function App() {
             onResume={handleResume}
             onRestart={handleRestart}
             onSettings={() => setShowSettings(true)}
-            onQuit={handleQuit}
+            onQuit={handleQuitToMenu}
             colors={colors}
           />
 
@@ -311,7 +312,7 @@ function App() {
             highScore={highScore}
             isNewHighScore={score > 0 && score >= highScore}
             onRestart={handleRestart}
-            onMenu={handleQuit}
+            onMenu={handleQuitToMenu}
             colors={colors}
           />
         </div>

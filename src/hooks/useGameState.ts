@@ -10,6 +10,7 @@ type Action =
   | { type: 'RESUME' }
   | { type: 'GAME_OVER' }
   | { type: 'RESTART' }
+  | { type: 'RESET' }
   | { type: 'SET_DIRECTION'; direction: Direction }
   | { type: 'TICK' }
   | { type: 'UPDATE_SETTINGS'; settings: Partial<GameSettings> }
@@ -230,6 +231,23 @@ function gameReducer(state: GameReducerState, action: Action): GameReducerState 
       };
     }
 
+    case 'RESET': {
+      const settings = state.settings;
+      const snake = createInitialSnake(settings.gridSize);
+      const food = generateFood(snake, settings.gridSize);
+      return {
+        ...state,
+        snake,
+        food,
+        direction: 'right',
+        nextDirection: 'right',
+        score: 0,
+        level: 1,
+        speed: settings.initialSpeed,
+        state: 'idle'
+      };
+    }
+
     default:
       return state;
   }
@@ -245,6 +263,7 @@ export function useGameState() {
   const pause = useCallback(() => dispatch({ type: 'PAUSE' }), []);
   const resume = useCallback(() => dispatch({ type: 'RESUME' }), []);
   const restart = useCallback(() => dispatch({ type: 'RESTART' }), []);
+  const reset = useCallback(() => dispatch({ type: 'RESET' }), []);
   const setDirection = useCallback((direction: Direction) => dispatch({ type: 'SET_DIRECTION', direction }), []);
   const updateSettings = useCallback((settings: Partial<GameSettings>) => dispatch({ type: 'UPDATE_SETTINGS', settings }), []);
   const loadSettings = useCallback((settings: GameSettings) => dispatch({ type: 'LOAD_SETTINGS', settings }), []);
@@ -279,6 +298,7 @@ export function useGameState() {
     pause,
     resume,
     restart,
+    reset,
     setDirection,
     updateSettings,
     loadSettings,
