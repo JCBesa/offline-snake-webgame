@@ -1,0 +1,6 @@
+# Offline Snake Game - PWA
+User-agent: *
+Allow: /
+
+# This is a client-side only game, no server-side content
+Sitemap: https://example.com/sitemap.xml
